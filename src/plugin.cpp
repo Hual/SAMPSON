@@ -1,4 +1,4 @@
-#define PLUGIN_VERSION "0.1.0"
+#define PLUGIN_VERSION "0.1.1"
 
 #include <plugincommon.h>
 #include <amx/amx.h>
