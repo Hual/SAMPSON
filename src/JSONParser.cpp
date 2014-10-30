@@ -4,25 +4,38 @@
 #include "Server.h"
 #include "Util.h"
 
-CALLBACK_RETURN JSONParser::OpenFile(CALLBACK_PARAMS)
+CALLBACK_RETURN JSONParser::ParseFile(CALLBACK_PARAMS)
 {
 	if (pParams[0] < sizeof(cell))
 		return 0;
 
-	JSONNODE* pRoot;
+	JSONNODE* pRoot = NULL;
 	char szPath[MAX_PATH];
 	char* pReusableChar = AMXUtil::GetStringFromCell(pAmx, pParams[1]);
 	Server::GetScriptfilesPath(szPath, pReusableChar);
 	delete[] pReusableChar;
 
 	pReusableChar = Util::ReadFile(szPath);
-	pRoot = json_parse(pReusableChar);
-	delete[] pReusableChar;
+
+	if (pReusableChar)
+	{
+		pRoot = json_parse(pReusableChar);
+		delete[] pReusableChar;
+	}
 
 	return (cell)pRoot;
 }
 
-CALLBACK_RETURN JSONParser::CloseFile(CALLBACK_PARAMS)
+CALLBACK_RETURN JSONParser::ParseString(CALLBACK_PARAMS)
+{
+	char* pString = AMXUtil::GetStringFromCell(pAmx, pParams[1]);
+	JSONNODE* pRoot = json_parse(pString);
+	delete[] pString;
+
+	return (cell)pRoot;
+}
+
+CALLBACK_RETURN JSONParser::Close(CALLBACK_PARAMS)
 {
 	if (pParams[0] < sizeof(cell))
 		return 0;
@@ -51,11 +64,12 @@ CALLBACK_RETURN JSONParser::GetNode(CALLBACK_PARAMS)
 
 CALLBACK_RETURN JSONParser::GetString(CALLBACK_PARAMS)
 {
-	cell *out_addr = 0;
+	cell* out_addr = 0;
 	char* pPath = AMXUtil::GetStringFromCell(pAmx, pParams[4]);
 	amx_GetAddr(pAmx, pParams[2], &out_addr);
 	char* pStr = json_as_string(json_get_recursive((JSONNODE*)pParams[1], pPath, (char)pParams[6]));
 	amx_SetString(out_addr, pStr, pParams[5], 0, pParams[3]);
+	json_free(pStr);
 	delete[] pPath;
 
 	return 1;

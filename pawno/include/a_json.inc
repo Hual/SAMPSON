@@ -16,7 +16,8 @@
 #define JSON_ARRAY 4
 #define JSON_NODE 5
 
-native JSONNode:json_open(const file_path[]);
+native JSONNode:json_parse_file(const file_path[]);
+native JSONNode:json_parse_string(const string[]);
 native json_close(JSONNode:node);
 native json_get_type(JSONNode:node, const path[] = '\0', const path_delim = JSON_DEFAULT_DELIMITER);
 native JSONNode:json_get_node(JSONNode:node, const path[], const path_delim = JSON_DEFAULT_DELIMITER);

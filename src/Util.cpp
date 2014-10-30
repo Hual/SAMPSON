@@ -1,5 +1,6 @@
 #include "Util.h"
 #include "Platform.h"
+#include "AMXUtil.h"
 
 #include <stdio.h>
 
@@ -9,6 +10,10 @@ char* Util::ReadFile(const char* szPath)
 	unsigned long ulFileSize;
 	size_t bytesRead;
 	FILE* pFile = fopen(szPath, "r");
+
+	if (!pFile)
+		return 0;
+
 	fseek(pFile, 0, SEEK_END);
 	ulFileSize = ftell(pFile);
 	rewind(pFile);

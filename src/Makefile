@@ -3,7 +3,7 @@ CFLAGS=-fPIC -fpermissive -c -w -ISDK/ -Ilibjson/
 BFLAGS=-fshort-wchar -shared
 FLAGS=-DLINUX -D__LINUX__ -DNDEBUG -v -g0 -m32 -O2
 BUILDDIR=build
-BUILDFILE=json.so
+BUILDFILE=SAMPSON.so
 
 all:
 	@echo '====================== Build started ======================='

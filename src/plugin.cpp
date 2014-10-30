@@ -27,8 +27,9 @@ PLUGIN_EXPORT void PLUGIN_CALL Unload()
 
 AMX_NATIVE_INFO PluginNatives[] =
 {
-	{ "json_open", JSONParser::OpenFile },
-	{ "json_close", JSONParser::CloseFile },
+	{ "json_parse_file", JSONParser::ParseFile },
+	{ "json_parse_string", JSONParser::ParseString },
+	{ "json_close", JSONParser::Close },
 	{ "json_get_string", JSONParser::GetString },
 	{ "json_get_type", JSONParser::GetType },
 	{ "json_get_node", JSONParser::GetNode },
