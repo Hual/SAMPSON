@@ -3,5 +3,5 @@
 class Server
 {
 public:
-	static void GetScriptfilesPath(char* pBuf, const char* szAppend = 0);
+	static bool GetScriptfilesPath(char pBuf[], const char szAppend[] = nullptr);
 };

@@ -1,16 +1,35 @@
 #include "Platform.h"
 
-size_t Platform::GetExecutablePath(char* pBuf, size_t sSize)
+#include <cstring>
+
+Platform::JSONError Platform::Error = Platform::JSONError::JSON_ERROR_NONE;
+int Platform::SecondaryError = 0;
+
+char* Platform::GetExecutablePath(char pBuf[], const size_t sSize)
 {
-#if (defined WIN32 || defined _WIN32)
-	return GetModuleFileName(NULL, pBuf, sSize);
-#else
-	ssize_t result = readlink("/proc/self/exe", pBuf, sSize);
+	return ::_getcwd(pBuf, sSize);
+}
 
-	if (result != -1)
-		return result;
-	else
-		return NULL;
+CALLBACK_RETURN Platform::GetLastError(CALLBACK_PARAMS)
+{
+	return Error;
+}
 
-#endif
+CALLBACK_RETURN Platform::GetLastErrorSecondary(CALLBACK_PARAMS)
+{
+	return SecondaryError;
+}
+
+CALLBACK_RETURN Platform::GetErrorSecondaryString(CALLBACK_PARAMS)
+{
+	cell *out_addr = 0;
+	amx_GetAddr(pAmx, pParams[2], &out_addr);
+	char* pString = std::strerror(pParams[1]);
+
+	if (pString == nullptr)
+		return 0;
+
+	amx_SetString(out_addr, pString, pParams[4], 0, pParams[3]);
+
+	return 1;
 }

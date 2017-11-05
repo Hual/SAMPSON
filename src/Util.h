@@ -3,6 +3,6 @@
 class Util
 {
 public:
-	static char* ReadFile(const char* szPath);
+	static char* ReadFile(const char szPath[]);
 
 };

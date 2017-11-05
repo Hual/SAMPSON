@@ -1,22 +1,22 @@
+#include <cstring>
+
 #include "Server.h"
 #include "Platform.h"
 #include "AMXUtil.h"
-#include <string.h>
 
-void Server::GetScriptfilesPath(char* pBuf, const char* szAppend)
+#define S_SCRIPTFILES_PATH (PATH_SEPARATOR "scriptfiles" PATH_SEPARATOR)
+
+bool Server::GetScriptfilesPath(char pBuf[], const char szAppend[])
 {
-	Platform::GetExecutablePath(pBuf);
-	const size_t sLen = strlen(szAppend);
-	char* pBase = strrchr(pBuf, PATH_SEPARATOR) + 1;
-
-	memcpy(pBase, "scriptfiles", 11);
-	*(pBase + 11) = PATH_SEPARATOR;
-
-	if (szAppend)
-	{
-		memcpy(pBase + 12, szAppend, sLen);
-		pBase += sLen;
+	if (Platform::GetExecutablePath(pBuf) == nullptr) {
+		return false;
 	}
 
-	*(pBase + 12) = 0;
+	std::strcat(pBuf, S_SCRIPTFILES_PATH);
+	
+	if (szAppend != nullptr) {
+		std::strcat(pBuf, szAppend);
+	}
+
+	return true;
 }

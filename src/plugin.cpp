@@ -1,11 +1,11 @@
-#define PLUGIN_VERSION "0.1.1"
+#define PLUGIN_VERSION "0.2.0"
 
 #include <plugincommon.h>
 #include <amx/amx.h>
-#include <libjson.h>
 
 #include "AMXUtil.h"
 #include "JSONParser.h"
+#include "Platform.h"
 
 PLUGIN_EXPORT unsigned int PLUGIN_CALL Supports()
 {
@@ -16,13 +16,13 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void** ppData)
 {
 	AMXUtil::SetAMXFunctions(ppData[PLUGIN_DATA_AMX_EXPORTS]);
 	AMXUtil::SetPrintFunction((logprintf_t)ppData[PLUGIN_DATA_LOGPRINTF]);
-	AMXUtil::Printf("============== SAMPSON v"PLUGIN_VERSION" by King_Hual loaded ==============");
+	AMXUtil::Printf("============== SAMPSON v" PLUGIN_VERSION " by King_Hual loaded ==============");
 	return 1;
 }
 
 PLUGIN_EXPORT void PLUGIN_CALL Unload()
 {
-	AMXUtil::Printf("============= SAMPSON v"PLUGIN_VERSION" by King_Hual unloaded =============");
+	AMXUtil::Printf("============= SAMPSON v" PLUGIN_VERSION " by King_Hual unloaded =============");
 }
 
 AMX_NATIVE_INFO PluginNatives[] =
@@ -40,6 +40,9 @@ AMX_NATIVE_INFO PluginNatives[] =
 	{ "json_array_count", JSONParser::GetArraySize },
 	{ "json_array_at", JSONParser::GetArrayElement },
 	{ "json_get_name", JSONParser::GetName },
+	{ "json_get_last_error", Platform::GetLastError },
+	{ "json_get_last_error_extra", Platform::GetLastErrorSecondary },
+	{ "json_get_error_extra_string", Platform::GetErrorSecondaryString },
 	{ 0, 0 }
 };
 

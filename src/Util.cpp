@@ -1,28 +1,44 @@
 #include "Util.h"
+
+#include <cstdio>
+
 #include "Platform.h"
 #include "AMXUtil.h"
 
-#include <stdio.h>
-
-char* Util::ReadFile(const char* szPath)
+char* Util::ReadFile(const char szPath[])
 {
-	char* pResult;
-	unsigned long ulFileSize;
-	size_t bytesRead;
-	FILE* pFile = fopen(szPath, "r");
+	FILE* pFile = nullptr;
+	char* pResult = nullptr;
+	long lFileSize = 0L;
+	size_t bytesRead = 0U;
 
-	if (!pFile)
-		return 0;
+	if ((pFile = std::fopen(szPath, "rb")) == nullptr) {
+		Platform::SecondaryError = errno;
+		return nullptr;
+	}
 
-	fseek(pFile, 0, SEEK_END);
-	ulFileSize = ftell(pFile);
-	rewind(pFile);
-
-	pResult = new char[ulFileSize+1];
-	bytesRead = fread(pResult, sizeof(char), ulFileSize, pFile);
-	fclose(pFile);
+	if (std::fseek(pFile, 0, SEEK_END) != 0) {
+		Platform::SecondaryError = errno;
+		std::fclose(pFile);
+		return nullptr; 
+	}
 	
-	pResult[bytesRead] = 0;
+	if ((lFileSize = std::ftell(pFile)) == -1L) {
+		Platform::SecondaryError = errno;
+		std::fclose(pFile);
+		return nullptr;
+	}
 
+	std::rewind(pFile);
+
+	pResult = new char[lFileSize + 1];
+	if ((bytesRead = std::fread(pResult, sizeof(char), lFileSize, pFile)) != lFileSize) {
+		std::fclose(pFile);
+		return nullptr;
+	}
+
+	std::fclose(pFile);
+
+	pResult[bytesRead] = 0;
 	return pResult;
 }

@@ -3,7 +3,7 @@
 #include <plugincommon.h>
 #include <amx/amx.h>
 #include <libjson.h>
-#include <string.h>
+#include <cstring>
 
 #include "AMXUtil.h"
 
