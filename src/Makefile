@@ -1,5 +1,5 @@
 GXX=g++
-CFLAGS=-fPIC -fpermissive -c -w -ISDK/ -Ilibjson/
+CFLAGS=-fPIC -fpermissive -c -w -std=c++11 -ISDK/ -Ilibjson/
 BFLAGS=-fshort-wchar -shared
 FLAGS=-DLINUX -D__LINUX__ -DNDEBUG -v -g0 -m32 -O2
 BUILDDIR=build
